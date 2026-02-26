@@ -1,4 +1,4 @@
-package repository
+package member_repository_interface
 
 import "coba-firebase-golang/app/database/model"
 

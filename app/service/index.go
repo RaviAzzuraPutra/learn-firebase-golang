@@ -87,7 +87,7 @@ func (s *Member_Service) GetById(ID string) (*model.Member, error) {
 
 }
 
-func (s *Member_Service) Update(ID string, request request.Member_Request) (*model.Member, error) {
+func (s *Member_Service) Update(ID string, request *request.Member_Request) (*model.Member, error) {
 
 	if request.Name == nil || *request.Name == "" {
 		return nil, helper.NewBadRequest("Name Cannot Be Empty!")

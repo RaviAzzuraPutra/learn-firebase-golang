@@ -20,6 +20,8 @@ func NewMemberControllerRegistry(Member_Service member_service_interface.Member_
 
 func (c *Member_Controller) Create(ctx *gin.Context) {
 
+	contexx := ctx.Request.Context()
+
 	request := new(request.Member_Request)
 
 	errRequest := ctx.ShouldBind(request)
@@ -31,7 +33,7 @@ func (c *Member_Controller) Create(ctx *gin.Context) {
 		})
 	}
 
-	member, errCreate := c.service.Create(request)
+	member, errCreate := c.service.Create(request, contexx)
 
 	if errCreate != nil {
 		if appError, ok := errCreate.(*helper.AppError); ok {
@@ -57,7 +59,9 @@ func (c *Member_Controller) Create(ctx *gin.Context) {
 
 func (c *Member_Controller) GetAll(ctx *gin.Context) {
 
-	member, errGet := c.service.GetAll()
+	contexx := ctx.Request.Context()
+
+	member, errGet := c.service.GetAll(contexx)
 
 	if errGet != nil {
 		if appError, ok := errGet.(*helper.AppError); ok {
@@ -83,9 +87,11 @@ func (c *Member_Controller) GetAll(ctx *gin.Context) {
 
 func (c *Member_Controller) GetById(ctx *gin.Context) {
 
+	contexx := ctx.Request.Context()
+
 	ID := ctx.Param("id")
 
-	member, errGet := c.service.GetById(ID)
+	member, errGet := c.service.GetById(ID, contexx)
 
 	if errGet != nil {
 		if appError, ok := errGet.(*helper.AppError); ok {
@@ -111,6 +117,8 @@ func (c *Member_Controller) GetById(ctx *gin.Context) {
 
 func (c *Member_Controller) Update(ctx *gin.Context) {
 
+	contexx := ctx.Request.Context()
+
 	ID := ctx.Param("id")
 
 	request := new(request.Member_Request)
@@ -124,7 +132,7 @@ func (c *Member_Controller) Update(ctx *gin.Context) {
 		})
 	}
 
-	member, errUpdate := c.service.Update(ID, request)
+	member, errUpdate := c.service.Update(ID, request, contexx)
 
 	if errUpdate != nil {
 		if appError, ok := errUpdate.(*helper.AppError); ok {
@@ -150,9 +158,11 @@ func (c *Member_Controller) Update(ctx *gin.Context) {
 
 func (c *Member_Controller) Delete(ctx *gin.Context) {
 
+	contexx := ctx.Request.Context()
+
 	ID := ctx.Param("id")
 
-	errDelete := c.service.Delete(ID)
+	errDelete := c.service.Delete(ID, contexx)
 
 	if errDelete != nil {
 		if appError, ok := errDelete.(*helper.AppError); ok {

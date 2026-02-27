@@ -5,6 +5,7 @@ import (
 	"coba-firebase-golang/app/helper"
 	"coba-firebase-golang/app/interface/repository/member_repository_interface"
 	"coba-firebase-golang/app/request"
+	"context"
 	"time"
 
 	"github.com/google/uuid"
@@ -22,7 +23,7 @@ func NewMemberServiceRegistry(Member_Repository member_repository_interface.Memb
 	}
 }
 
-func (s *Member_Service) Create(request *request.Member_Request) (*model.Member, error) {
+func (s *Member_Service) Create(request *request.Member_Request, ctx context.Context) (*model.Member, error) {
 
 	if request.Name == nil || *request.Name == "" {
 		return nil, helper.NewBadRequest("Name Cannot Be Empty!")
@@ -49,7 +50,7 @@ func (s *Member_Service) Create(request *request.Member_Request) (*model.Member,
 		Member_Code: MemberCode,
 	}
 
-	err := s.repository.Create(member)
+	err := s.repository.Create(member, ctx)
 
 	if err != nil {
 		return nil, helper.NewInternalServerError("An error occurred while creating new member data. : " + err.Error())
@@ -58,9 +59,9 @@ func (s *Member_Service) Create(request *request.Member_Request) (*model.Member,
 	return member, nil
 }
 
-func (s *Member_Service) GetAll() ([]model.Member, error) {
+func (s *Member_Service) GetAll(ctx context.Context) ([]model.Member, error) {
 
-	member, errGet := s.repository.GetAll()
+	member, errGet := s.repository.GetAll(ctx)
 
 	if errGet != nil {
 		return nil, helper.NewInternalServerError("An error occurred while retrieving all member data. : " + errGet.Error())
@@ -70,9 +71,9 @@ func (s *Member_Service) GetAll() ([]model.Member, error) {
 
 }
 
-func (s *Member_Service) GetById(ID string) (*model.Member, error) {
+func (s *Member_Service) GetById(ID string, ctx context.Context) (*model.Member, error) {
 
-	member, errGet := s.repository.GetById(ID)
+	member, errGet := s.repository.GetById(ID, ctx)
 
 	if errGet != nil {
 
@@ -87,7 +88,7 @@ func (s *Member_Service) GetById(ID string) (*model.Member, error) {
 
 }
 
-func (s *Member_Service) Update(ID string, request *request.Member_Request) (*model.Member, error) {
+func (s *Member_Service) Update(ID string, request *request.Member_Request, ctx context.Context) (*model.Member, error) {
 
 	if request.Name == nil || *request.Name == "" {
 		return nil, helper.NewBadRequest("Name Cannot Be Empty!")
@@ -101,7 +102,7 @@ func (s *Member_Service) Update(ID string, request *request.Member_Request) (*mo
 		return nil, helper.NewBadRequest("Phone Cannot Be Empty")
 	}
 
-	member, errGet := s.repository.GetById(ID)
+	member, errGet := s.repository.GetById(ID, ctx)
 
 	if errGet != nil {
 
@@ -116,7 +117,7 @@ func (s *Member_Service) Update(ID string, request *request.Member_Request) (*mo
 	member.Email = request.Email
 	member.Phone = request.Phone
 
-	errUpdate := s.repository.Update(ID, member)
+	errUpdate := s.repository.Update(ID, member, ctx)
 
 	if errUpdate != nil {
 		return nil, helper.NewInternalServerError("An error occurred while update member data. : " + errUpdate.Error())
@@ -125,9 +126,9 @@ func (s *Member_Service) Update(ID string, request *request.Member_Request) (*mo
 	return member, nil
 }
 
-func (s *Member_Service) Delete(ID string) error {
+func (s *Member_Service) Delete(ID string, ctx context.Context) error {
 
-	_, errGet := s.repository.GetById(ID)
+	_, errGet := s.repository.GetById(ID, ctx)
 
 	if errGet != nil {
 
@@ -138,7 +139,7 @@ func (s *Member_Service) Delete(ID string) error {
 		return helper.NewInternalServerError("An error occurred while retrieving member data by id. : " + errGet.Error())
 	}
 
-	errDelete := s.repository.Delete(ID)
+	errDelete := s.repository.Delete(ID, ctx)
 
 	if errDelete != nil {
 		return helper.NewInternalServerError("An error occurred while delete member data. : " + errDelete.Error())

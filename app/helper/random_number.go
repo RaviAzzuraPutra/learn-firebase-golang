@@ -3,6 +3,7 @@ package helper
 import (
 	"crypto/rand"
 	"math/big"
+	"strconv"
 )
 
 func GenerateRandomNumber() string {
@@ -16,6 +17,6 @@ func GenerateRandomNumber() string {
 
 	result := number.Int64() + int64(min)
 
-	return string(result)
+	return strconv.FormatInt(result, 10)
 
 }

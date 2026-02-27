@@ -18,9 +18,7 @@ func NewMemberRepositoryRegistry() *Member_Repository {
 	}
 }
 
-func (repo *Member_Repository) Create(member *model.Member) error {
-
-	ctx := context.Background()
+func (repo *Member_Repository) Create(member *model.Member, ctx context.Context) error {
 
 	_, errCreate := repo.DB.Collection("members").Doc(member.ID).Set(ctx, member)
 
@@ -28,9 +26,7 @@ func (repo *Member_Repository) Create(member *model.Member) error {
 
 }
 
-func (repo *Member_Repository) GetAll() ([]model.Member, error) {
-
-	ctx := context.Background()
+func (repo *Member_Repository) GetAll(ctx context.Context) ([]model.Member, error) {
 
 	iter := repo.DB.Collection("members").Documents(ctx)
 
@@ -54,9 +50,7 @@ func (repo *Member_Repository) GetAll() ([]model.Member, error) {
 
 }
 
-func (repo *Member_Repository) GetById(ID string) (*model.Member, error) {
-
-	ctx := context.Background()
+func (repo *Member_Repository) GetById(ID string, ctx context.Context) (*model.Member, error) {
 
 	doc, err := repo.DB.Collection("members").Doc(ID).Get(ctx)
 
@@ -72,9 +66,7 @@ func (repo *Member_Repository) GetById(ID string) (*model.Member, error) {
 
 }
 
-func (repo *Member_Repository) Update(ID string, member *model.Member) error {
-
-	ctx := context.Background()
+func (repo *Member_Repository) Update(ID string, member *model.Member, ctx context.Context) error {
 
 	_, err := repo.DB.Collection("members").Doc(ID).Set(ctx, member)
 
@@ -82,9 +74,7 @@ func (repo *Member_Repository) Update(ID string, member *model.Member) error {
 
 }
 
-func (repo *Member_Repository) Delete(ID string) error {
-
-	ctx := context.Background()
+func (repo *Member_Repository) Delete(ID string, ctx context.Context) error {
 
 	_, err := repo.DB.Collection("members").Doc(ID).Delete(ctx)
 
